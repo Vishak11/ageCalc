@@ -6,30 +6,31 @@ const App = () => {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [age, setAge] = useState({ years: "--", months: "--", days: "--" });
-  const [errors, setErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
 
   const validateInputs = () => {
-    const errors = {};
     const today = new Date();
     const enteredDate = new Date(`${year}-${month}-${day}`);
+    let error = "";
 
-    if (!day) errors.day = "This field is required";
-    else if (day < 1 || day > 31) errors.day = "Must be a valid day";
+    if (!day) error = "Day is required.";
+    else if (day < 1 || day > 31) error = "Must be a valid day.";
 
-    if (!month) errors.month = "This field is required";
-    else if (month < 1 || month > 12) errors.month = "Must be a valid month";
+    if (!error && !month) error = "Month is required.";
+    else if (!error && (month < 1 || month > 12)) error = "Must be a valid month.";
 
-    if (!year) errors.year = "This field is required";
-    else if (new Date(`${year}-01-01`) > today) errors.year = "Must be in the past";
+    if (!error && !year) error = "Year is required.";
+    else if (!error && new Date(`${year}-01-01`) > today) error = "Year must be in the past.";
 
-    if (!errors.day && !errors.month && !errors.year) {
-      if (enteredDate.toString() === "Invalid Date" || enteredDate > today) {
-        errors.general = "Must be a valid date";
-      }
+    if (
+      !error &&
+      (enteredDate.toString() === "Invalid Date" || enteredDate > today)
+    ) {
+      error = "Must be a valid date.";
     }
 
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
+    setErrorMessage(error);
+    return error === "";
   };
 
   const calculateAge = () => {
@@ -59,41 +60,34 @@ const App = () => {
     <div>
       <div className="content">
         <div className="input">
-          <div>
-            <input
-              type="number"
-              id="dayIn"
-              value={day}
-              onChange={(e) => setDay(e.target.value)}
-              placeholder="DD"
-              aria-label="Day Input"
-            />
-            {errors.day && <p className="error" id="dayError">{errors.day}</p>}
-          </div>
-          <div>
-            <input
-              type="number"
-              id="monthIn"
-              value={month}
-              onChange={(e) => setMonth(e.target.value)}
-              placeholder="MM"
-              aria-label="Month Input"
-            />
-            {errors.month && <p className="error" id="monthError">{errors.month}</p>}
-          </div>
-          <div>
-            <input
-              type="number"
-              id="yearIn"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              placeholder="YYYY"
-              aria-label="Year Input"
-            />
-            {errors.year && <p className="error" id="yearError">{errors.year}</p>}
-          </div>
+          <input
+            type="number"
+            id="dayIn"
+            value={day}
+            onChange={(e) => setDay(e.target.value)}
+            placeholder="DD"
+            aria-label="Day Input"
+          />
+          <input
+            type="number"
+            id="monthIn"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            placeholder="MM"
+            aria-label="Month Input"
+          />
+          <input
+            type="number"
+            id="yearIn"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            placeholder="YYYY"
+            aria-label="Year Input"
+          />
         </div>
-        {errors.general && <p className="error" id="generalError">{errors.general}</p>}
+
+        {/* Single error message display */}
+        {errorMessage && <p className="error" id="errorDisplay">{errorMessage}</p>}
 
         <div className="button">
           <button id="calculateBtn" onClick={calculateAge}>
