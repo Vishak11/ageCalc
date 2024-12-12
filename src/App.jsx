@@ -20,7 +20,7 @@ const App = () => {
     else if (month < 1 || month > 12) errors.month = "Must be a valid month";
 
     if (!year) errors.year = "This field is required";
-    else if (new Date(`${year}-01-01`) > today) errors.year = "Must be in past";
+    else if (new Date(`${year}-01-01`) > today) errors.year = "Must be in the past";
 
     if (!errors.day && !errors.month && !errors.year) {
       if (enteredDate.toString() === "Invalid Date" || enteredDate > today) {
@@ -66,8 +66,9 @@ const App = () => {
               value={day}
               onChange={(e) => setDay(e.target.value)}
               placeholder="DD"
+              aria-label="Day Input"
             />
-            {errors.day && <p className="error">{errors.day}</p>}
+            {errors.day && <p className="error" id="dayError">{errors.day}</p>}
           </div>
           <div>
             <input
@@ -76,8 +77,9 @@ const App = () => {
               value={month}
               onChange={(e) => setMonth(e.target.value)}
               placeholder="MM"
+              aria-label="Month Input"
             />
-            {errors.month && <p className="error">{errors.month}</p>}
+            {errors.month && <p className="error" id="monthError">{errors.month}</p>}
           </div>
           <div>
             <input
@@ -86,11 +88,12 @@ const App = () => {
               value={year}
               onChange={(e) => setYear(e.target.value)}
               placeholder="YYYY"
+              aria-label="Year Input"
             />
-            {errors.year && <p className="error">{errors.year}</p>}
+            {errors.year && <p className="error" id="yearError">{errors.year}</p>}
           </div>
         </div>
-        {errors.general && <p className="error">{errors.general}</p>}
+        {errors.general && <p className="error" id="generalError">{errors.general}</p>}
 
         <div className="button">
           <button id="calculateBtn" onClick={calculateAge}>
@@ -100,15 +103,15 @@ const App = () => {
 
         <div>
           <div className="output">
-            <p>{age.years}</p>
+            <p id="yearOut">{age.years}</p>
             <p style={{ color: "black" }}>years</p>
           </div>
           <div className="output">
-            <p>{age.months}</p>
+            <p id="monthOut">{age.months}</p>
             <p style={{ color: "black" }}>months</p>
           </div>
           <div className="output">
-            <p>{age.days}</p>
+            <p id="dayOut">{age.days}</p>
             <p style={{ color: "black" }}>days</p>
           </div>
         </div>
