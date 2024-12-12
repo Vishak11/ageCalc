@@ -58,7 +58,7 @@ const App = () => {
   return (
     <div>
       <div className="content">
-        <div className="inputs">
+        <div className="input">
           <div>
             <input
               type="number"
