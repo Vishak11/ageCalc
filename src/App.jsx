@@ -126,30 +126,29 @@ const App = () => {
 
   const validateInputs = () => {
     const today = new Date();
+    let errorObj = {};
+
+    if (!day) errorObj.day = "This field is required";
+    else if (day < 1 || day > 31) errorObj.day = "Must be a valid day";
+
+    if (!month) errorObj.month = "This field is required";
+    else if (month < 1 || month > 12) errorObj.month = "Must be a valid month";
+
+    if (!year) errorObj.year = "This field is required";
+    else if (new Date(`${year}-01-01`) > today) errorObj.year = "Must be in past";
+
     const enteredDate = new Date(`${year}-${month}-${day}`);
-    const newErrors = { day: "", month: "", year: "" };
-
-    if (!day) newErrors.day = "This field is required";
-    else if (day < 1 || day > 31) newErrors.day = "Must be a valid day";
-
-    if (!month) newErrors.month = "This field is required";
-    else if (month < 1 || month > 12) newErrors.month = "Must be a valid month";
-
-    if (!year) newErrors.year = "This field is required";
-    else if (new Date(`${year}-01-01`) > today)
-      newErrors.year = "Must be in past";
-
     if (
-      !newErrors.day &&
-      !newErrors.month &&
-      !newErrors.year &&
+      !errorObj.day &&
+      !errorObj.month &&
+      !errorObj.year &&
       (enteredDate.toString() === "Invalid Date" || enteredDate > today)
     ) {
-      newErrors.day = "Must be a valid date";
+      errorObj.day = "Must be a valid date";
     }
 
-    setErrors(newErrors);
-    return !newErrors.day && !newErrors.month && !newErrors.year;
+    setErrors(errorObj);
+    return Object.keys(errorObj).length === 0;
   };
 
   const calculateAge = () => {
@@ -179,33 +178,39 @@ const App = () => {
     <div>
       <div className="content">
         <div className="input">
-          <input
-            type="number"
-            id="dayIn"
-            value={day}
-            onChange={(e) => setDay(e.target.value)}
-            placeholder="DD"
-            aria-label="Day Input"
-          />
-          {errors.day && <p className="error">{errors.day}</p>}
-          <input
-            type="number"
-            id="monthIn"
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            placeholder="MM"
-            aria-label="Month Input"
-          />
-          {errors.month && <p className="error">{errors.month}</p>}
-          <input
-            type="number"
-            id="yearIn"
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-            placeholder="YYYY"
-            aria-label="Year Input"
-          />
-          {errors.year && <p className="error">{errors.year}</p>}
+          <div>
+            <input
+              type="number"
+              id="dayIn"
+              value={day}
+              onChange={(e) => setDay(e.target.value)}
+              placeholder="DD"
+              aria-label="Day Input"
+            />
+            {errors.day && <p className="error">{errors.day}</p>}
+          </div>
+          <div>
+            <input
+              type="number"
+              id="monthIn"
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              placeholder="MM"
+              aria-label="Month Input"
+            />
+            {errors.month && <p className="error">{errors.month}</p>}
+          </div>
+          <div>
+            <input
+              type="number"
+              id="yearIn"
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              placeholder="YYYY"
+              aria-label="Year Input"
+            />
+            {errors.year && <p className="error">{errors.year}</p>}
+          </div>
         </div>
 
         <div className="button">
@@ -234,4 +239,3 @@ const App = () => {
 };
 
 export default App;
-
